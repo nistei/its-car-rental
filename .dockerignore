@@ -4,4 +4,4 @@ dist/**
 .gitignore/**
 .dockerignore/**
 Dockerfile/**
-.secrets/**
+secrets/**

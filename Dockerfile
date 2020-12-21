@@ -1,14 +1,13 @@
 FROM node:14.15.3-alpine as builder
 
 WORKDIR /app
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 
 COPY package*.json ./
 COPY tsconfig*.json ./
 COPY .eslintrc.js ./
 COPY .prettierrc ./
 
-RUN npm install -g @nestjs/cli
 RUN npm install
 
 COPY src/ src/

@@ -6,6 +6,8 @@ services:
     restart: unless-stopped
     ports:
       - 6379:6379
+    networks:
+      - its-car-rental
 
   mysql:
     image: mysql:latest
@@ -22,9 +24,15 @@ services:
       - db_password
     ports:
       - 3306:3306
+    networks:
+      - its-car-rental
 
 secrets:
   db_password:
-    file: .secrets/db_password
+    file: secrets/db_password
   db_root_password:
-    file: .secrets/db_root_password
+    file: secrets/db_root_password
+
+networks:
+  its-car-rental:
+    driver: bridge

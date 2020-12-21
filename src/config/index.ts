@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 import * as winston from 'winston';
+import * as path from 'path';
 
 export default () => ({
   logger: {
@@ -12,7 +13,7 @@ export default () => ({
     port: parseInt(process.env.DATABASE_PORT) || 3306,
     database: process.env.DATABASE_DATABASE || 'its-car-rental',
     username: process.env.DATABASE_USERNAME || 'its-car-rental',
-    password: envOrFile('DATABASE_PASSWORD', './.secrets/db_password'),
+    password: envOrFile('DATABASE_PASSWORD', 'db_password'),
     logging: process.env.DATABASE_LOGGING || 'error',
     connectionLimit: parseInt(process.env.DATABASE_CONN_LIMIT) || 10,
   },
@@ -21,7 +22,7 @@ export default () => ({
     port: parseInt(process.env.REDIS_PORT) || 6379,
   },
   auth: {
-    secret: envOrFile('AUTH_SECRET', './.secrets/jwt_secret') || 'its-car-rental',
+    secret: envOrFile('AUTH_SECRET', 'jwt_secret') || 'its-car-rental',
     expires: process.env.AUTH_EXPIRES || '12h',
   },
 });
@@ -35,8 +36,12 @@ function envOrFile(envName: string, defaultPath?: string): string {
     return fs.readFileSync(process.env[envName + '_FILE']).toString();
   }
 
-  if (defaultPath && fs.existsSync(defaultPath)) {
-    return fs.readFileSync(defaultPath).toString();
+  const basePath = process.env.SECRET_BASE_PATH || './secrets';
+  const filePath = path.join(basePath, defaultPath);
+
+  console.log(filePath);
+  if (filePath && fs.existsSync(filePath)) {
+    return fs.readFileSync(filePath).toString();
   }
 
   return "";
