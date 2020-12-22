@@ -13,7 +13,7 @@
     "url": "https://github.com/nistei/its-car-rental/issues"
   },
   "scripts": {
-    "secrets": "node scripts/secrets.js",
+    "postinstall": "node scripts/secrets.js",
     "compose": "docker-compose up -d",
     "prebuild": "rimraf dist",
     "build": "nest build",

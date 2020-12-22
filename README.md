@@ -11,11 +11,8 @@
 ## Installation
 
 ```bash
-# install dependencies
+# install dependencies and create secrets
 $ npm install
-
-# create the secrets used to connect to the database
-$ npm secrets
 ```
 
 ## Running the app

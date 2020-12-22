@@ -10,9 +10,13 @@ function secret(path) {
 }
 
 const secrets = [
-  "./.secrets/db_root_password",
-  "./.secrets/db_password",
-  "./.secrets/jwt_secret",
+  "./secrets/db_root_password",
+  "./secrets/db_password",
+  "./secrets/jwt_secret",
 ]
+
+if (!fs.existsSync('./secrets')) {
+  fs.mkdirSync('./secrets');
+}
 
 secrets.forEach(secret);
