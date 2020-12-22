@@ -31,6 +31,8 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+Open your browser on [localhost:3000](http://localhost:3000)
+
 ## Test
 
 ```bash

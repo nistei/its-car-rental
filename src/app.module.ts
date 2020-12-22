@@ -8,6 +8,8 @@ import configuration from './config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WinstonModule } from 'nest-winston';
 import { CacheModule } from './cache/cache.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 import * as winston from 'winston';
 
 @Module({
@@ -58,6 +60,8 @@ import * as winston from 'winston';
       },
     }),
     CacheModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
