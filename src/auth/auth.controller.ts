@@ -6,6 +6,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AccessToken, LoginDto } from './auth.class';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/entities/user.entity';
+import { Public } from '../decorators/public.decorator';
 
 @ApiTags('auth')
 @Controller('api/v1/auth')
@@ -14,6 +15,7 @@ export class AuthController {
   }
 
   @Post('/register')
+  @Public()
   @ApiBody({
     description: 'The register details',
     type: CreateUserDto,
@@ -24,6 +26,7 @@ export class AuthController {
   }
 
   @UseGuards(LocalAuthGuard)
+  @Public()
   @Post('/login')
   @ApiBody({
     description: 'The login details',

@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role } from '../../enums/role.enum';
-import { ROLES_KEY } from '../roles.decorator';
+import { ROLES_KEY } from '../../decorators/roles.decorator';
 import { User } from '../../users/entities/user.entity';
 
 @Injectable()
@@ -18,11 +18,11 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const { user } = context.switchToHttp().getRequest();
-    if (!user) {
+    const request = context.switchToHttp().getRequest();
+    if (!request.user) {
       return false;
     }
 
-    return requiredRoles.some((role) => (user as User).role === role);
+    return requiredRoles.includes((request.user as User).role);
   }
 }
