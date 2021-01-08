@@ -24,7 +24,7 @@ import * as winston from 'winston';
         username: configService.get('database.username'),
         password: configService.get('database.password'),
         database: configService.get('database.database'),
-        entities: [],
+        autoLoadEntities: true,
         synchronize: true,
         legacySpatialSupport: false,
         namingStrategy: new CustomNamingStrategy(),

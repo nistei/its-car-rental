@@ -1,28 +1,55 @@
-import { Injectable } from '@nestjs/common';
-import { User } from './user';
+import { Injectable, Logger, NotImplementedException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
+import { Role } from '../enums/role.enum';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
-    {
-      id: 1,
-      username: 'john',
-      password: 'changeme',
-      role: 'Maintenance'
-    },
-    {
-      id: 2,
-      username: 'maria',
-      password: 'guess',
-      role: 'User',
-    },
-  ];
+  private readonly logger = new Logger(UsersService.name);
 
-  async findOneByUsername(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+  constructor(
+    @InjectRepository(User)
+    private readonly users: Repository<User>,
+  ) {
   }
 
-  async findOneById(id: number): Promise<User | undefined> {
-    return this.users.find(user => user.id === id);
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    this.logger.log(`Creating user with name ${createUserDto.username}`);
+
+    const salt = await bcrypt.genSalt();
+    const hashed = await bcrypt.hash(createUserDto.password, salt);
+
+    return this.users.save({
+      username: createUserDto.username,
+      password: hashed,
+      role: Role.Ghost,
+    });
+  }
+
+  findAll() {
+    // TODO: Implement
+    throw new NotImplementedException();
+  }
+
+  findOne(id: number): Promise<User> {
+    return this.users.findOne(id);
+  }
+
+  findOneByUsername(username: string): Promise<User> {
+    return this.users.findOne({ username });
+  }
+
+  update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    // TODO: Implement
+    throw new NotImplementedException();
+  }
+
+  remove(id: number) {
+    // TODO: Implement
+    throw new NotImplementedException();
   }
 }
