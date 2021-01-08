@@ -50,8 +50,8 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @ApiSecurity('jwt')
   @Roles(Role.Admin)
+  @ApiSecurity('jwt')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }

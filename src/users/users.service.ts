@@ -50,9 +50,11 @@ export class UsersService {
       results.pop();
     }
 
+    results.map(res => res.password = undefined);
+
     return {
-      total,
       results,
+      total,
       count: results.length,
       next: nextCursor,
     }
