@@ -11,8 +11,8 @@ export default () => ({
   database: {
     host: process.env.DATABASE_HOST || 'localhost',
     port: parseInt(process.env.DATABASE_PORT) || 3306,
-    database: process.env.DATABASE_DATABASE || 'its-car-rental',
-    username: process.env.DATABASE_USERNAME || 'its-car-rental',
+    database: process.env.DATABASE_DATABASE || 'its_car_rental',
+    username: process.env.DATABASE_USERNAME || 'its_car_rental',
     password: envOrFile('DATABASE_PASSWORD', 'db_password'),
     logging: process.env.DATABASE_LOGGING || 'error',
     connectionLimit: parseInt(process.env.DATABASE_CONN_LIMIT) || 10,

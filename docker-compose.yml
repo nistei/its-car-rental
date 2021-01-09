@@ -16,8 +16,8 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     environment:
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
-      - MYSQL_DATABASE=its-car-rental
-      - MYSQL_USER=its-car-rental
+      - MYSQL_DATABASE=its_car_rental
+      - MYSQL_USER=its_car_rental
       - MYSQL_PASSWORD_FILE=/run/secrets/db_password
     secrets:
       - db_root_password
