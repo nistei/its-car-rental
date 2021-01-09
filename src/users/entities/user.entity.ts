@@ -1,16 +1,10 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../../enums/role.enum';
+import { BaseEntity } from '../../common/base.entity';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  @ApiProperty({
-    description: 'The unique identifier of the user',
-    example: '1234',
-  })
-  id?: number;
-
+export class User extends BaseEntity {
   @Column()
   @Index({unique: true})
   @ApiProperty({ description: 'The username', example: 'userA' })
