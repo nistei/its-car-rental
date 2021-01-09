@@ -5,6 +5,7 @@ import { UpdateVehicleCategoryDto } from './dto/update-vehicle-category.dto';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
+import { Public } from '../decorators/public.decorator';
 
 @ApiTags('vehicle-categories')
 @Controller('api/v1/vehicle-categories')
@@ -19,11 +20,13 @@ export class VehicleCategoriesController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.vehicleCategoriesService.findAll();
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
     return this.vehicleCategoriesService.findOne(+id);
   }

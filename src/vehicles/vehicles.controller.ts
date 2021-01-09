@@ -5,6 +5,7 @@ import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
+import { Public } from '../decorators/public.decorator';
 
 @ApiTags('vehicles')
 @Controller('api/v1/vehicles')
@@ -19,11 +20,13 @@ export class VehiclesController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.vehiclesService.findAll();
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
     return this.vehiclesService.findOne(+id);
   }
