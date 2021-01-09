@@ -10,6 +10,10 @@ import { WinstonModule } from 'nest-winston';
 import { CacheModule } from './cache/cache.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { MaintenanceReportsModule } from './maintenance-reports/maintenance-reports.module';
+import { VehiclesModule } from './vehicles/vehicles.module';
+import { LocationsModule } from './locations/locations.module';
+import { VehicleCategoriesModule } from './vehicle-categories/vehicle-categories.module';
 import * as winston from 'winston';
 
 @Module({
@@ -62,6 +66,10 @@ import * as winston from 'winston';
     CacheModule,
     AuthModule,
     UsersModule,
+    MaintenanceReportsModule,
+    VehiclesModule,
+    LocationsModule,
+    VehicleCategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
