@@ -33,6 +33,10 @@ export class UsersService {
     });
   }
 
+  count(): Promise<number> {
+    return this.users.count();
+  }
+
   async findPaginated(pagination: PaginationDto): Promise<Paginated<Partial<User>>> {
     this.logger.log(`Trying to fetch ${pagination.take} users, starting at ${pagination.next}`);
 
@@ -68,13 +72,13 @@ export class UsersService {
     return this.users.findOne({ username });
   }
 
+  // TODO: Implement
   update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    // TODO: Implement
     throw new NotImplementedException();
   }
 
+  // TODO: Implement
   remove(id: number) {
-    // TODO: Implement
     throw new NotImplementedException();
   }
 }
