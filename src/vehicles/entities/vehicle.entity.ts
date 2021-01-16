@@ -24,8 +24,7 @@ export class Vehicle extends BaseEntity {
   @ApiProperty({ description: 'The year the vehicle got produced' })
   productionYear: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @ManyToOne(type => VehicleCategory, x => x.id)
+  @ManyToOne(() => VehicleCategory, x => x.id)
   @ApiProperty({ description: 'The category of the vehicle' })
   category: VehicleCategory;
 

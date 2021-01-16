@@ -10,8 +10,7 @@ export class Location extends BaseEntity {
   @ApiProperty({description: 'The name of the location'})
   name: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @ManyToOne(type => User, x => x.id)
+  @ManyToOne(() => User, x => x.id)
   @ApiProperty({ description: 'The head of the location' })
   manager: User;
 
