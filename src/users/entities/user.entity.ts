@@ -6,7 +6,7 @@ import { BaseEntity } from '../../common/base.entity';
 @Entity()
 export class User extends BaseEntity {
   @Column()
-  @Index({unique: true})
+  @Index({ unique: true })
   @ApiProperty({ description: 'The username', example: 'userA' })
   username: string;
 
