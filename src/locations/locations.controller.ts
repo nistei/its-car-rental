@@ -6,6 +6,7 @@ import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Public } from '../decorators/public.decorator';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
+import { LocationDto } from './dto/loaction.dto';
 
 @ApiTags('locations')
 @Controller('api/v1/locations')
@@ -15,27 +16,27 @@ export class LocationsController {
   @Post()
   @Roles(Role.Admin)
   @ApiSecurity('jwt')
-  create(@Body() createLocationDto: CreateLocationDto) {
-    return this.locationsService.create(createLocationDto);
+  async create(@Body() createLocationDto: CreateLocationDto): Promise<LocationDto> {
+   return this.locationsService.create(createLocationDto).then(LocationDto.map);
   }
 
   @Get()
   @Public()
-  findAll() {
-    return this.locationsService.findAll();
+  findAll(): Promise<LocationDto[]> {
+    return this.locationsService.findAll().then(LocationDto.mapList);
   }
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
-    return this.locationsService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<LocationDto> {
+    return this.locationsService.findOne(+id).then(LocationDto.map);
   }
 
   @Put(':id')
   @Roles(Role.Admin)
   @ApiSecurity('jwt')
-  update(@Param('id') id: string, @Body() updateLocationDto: UpdateLocationDto) {
-    return this.locationsService.update(+id, updateLocationDto);
+  update(@Param('id') id: string, @Body() updateLocationDto: UpdateLocationDto): Promise<LocationDto> {
+    return this.locationsService.update(+id, updateLocationDto).then(LocationDto.map);
   }
 
   @Delete(':id')
