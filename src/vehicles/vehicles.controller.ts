@@ -6,6 +6,7 @@ import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { Public } from '../decorators/public.decorator';
+import { VehicleDto } from './dto/vehicle.dto';
 
 @ApiTags('vehicles')
 @Controller('api/v1/vehicles')
@@ -15,27 +16,27 @@ export class VehiclesController {
   @Post()
   @Roles(Role.FleetManager)
   @ApiSecurity('jwt')
-  create(@Body() createVehicleDto: CreateVehicleDto) {
-    return this.vehiclesService.create(createVehicleDto);
+  create(@Body() createVehicleDto: CreateVehicleDto): Promise<VehicleDto> {
+    return this.vehiclesService.create(createVehicleDto).then(VehicleDto.map);
   }
 
   @Get()
   @Public()
-  findAll() {
-    return this.vehiclesService.findAll();
+  findAll(): Promise<VehicleDto[]> {
+    return this.vehiclesService.findAll().then(VehicleDto.mapList);
   }
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
-    return this.vehiclesService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<VehicleDto> {
+    return this.vehiclesService.findOne(+id).then(VehicleDto.map);
   }
 
   @Put(':id')
   @Roles(Role.FleetManager)
   @ApiSecurity('jwt')
-  update(@Param('id') id: string, @Body() updateVehicleDto: UpdateVehicleDto) {
-    return this.vehiclesService.update(+id, updateVehicleDto);
+  update(@Param('id') id: string, @Body() updateVehicleDto: UpdateVehicleDto): Promise<VehicleDto> {
+    return this.vehiclesService.update(+id, updateVehicleDto).then(VehicleDto.map);
   }
 
   @Delete(':id')

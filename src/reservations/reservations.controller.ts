@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Request } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
+import { ReservationDto } from './dto/reservation.dto';
 
 @ApiTags('reservations')
 @Controller('api/v1/reservations')
@@ -14,26 +15,26 @@ export class ReservationsController {
 
   @Post()
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice)
-  create(@Body() createReservationDto: CreateReservationDto) {
-    return this.reservationsService.create(createReservationDto);
+  create(@Body() createReservationDto: CreateReservationDto, @Request() req): Promise<ReservationDto> {
+    return this.reservationsService.create(createReservationDto, req.user).then(ReservationDto.map);
   }
 
   @Get()
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice, Role.FleetManager)
-  findAll() {
-    return this.reservationsService.findAll();
+  findAll(): Promise<ReservationDto[]> {
+    return this.reservationsService.findAll().then(ReservationDto.mapList);
   }
 
   @Get(':id')
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice, Role.FleetManager)
-  findOne(@Param('id') id: string) {
-    return this.reservationsService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<ReservationDto> {
+    return this.reservationsService.findOne(+id).then(ReservationDto.map);
   }
 
   @Put(':id')
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice)
-  update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto) {
-    return this.reservationsService.update(+id, updateReservationDto);
+  update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto): Promise<ReservationDto> {
+    return this.reservationsService.update(+id, updateReservationDto).then(ReservationDto.map);
   }
 
   @Delete(':id')

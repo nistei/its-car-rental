@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Put, Query, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from '../common/pagination.dto';
 import { Paginated } from '../common/paginated.class';
+import { UserDto } from './dto/user.dto';
 
 @ApiTags('users')
 @Controller('api/v1/users')
@@ -31,8 +31,13 @@ export class UsersController {
     description: 'The next id to take',
     schema: { minimum: 0, default: 0 }
   })
-  findPaginated(@Query(new ValidationPipe({ transform: true })) pagination: PaginationDto): Promise<Paginated<Partial<User>>> {
-    return this.usersService.findPaginated(pagination);
+  findPaginated(@Query(new ValidationPipe({ transform: true })) pagination: PaginationDto): Promise<Paginated<UserDto>> {
+    return this.usersService.findPaginated(pagination).then(paginated => {
+      return {
+        ...paginated,
+        results: UserDto.mapList(paginated.results),
+      }
+    });
   }
 
   @Get('_count')
@@ -42,15 +47,13 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Partial<User>> {
-    const { password, ...result } = await this.usersService.findOne(+id);
-    return result;
+  findOne(@Param('id') id: string): Promise<UserDto> {
+    return this.usersService.findOne(+id).then(UserDto.map);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
-    const { password, ...result } = await this.usersService.update(+id, updateUserDto);
-    return result;
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<UserDto> {
+    return this.usersService.update(+id, updateUserDto).then(UserDto.map);
   }
 
   @Delete(':id')

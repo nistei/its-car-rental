@@ -5,6 +5,7 @@ import { AccessToken, JwtPayload } from './auth.class';
 import { User } from '../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UserDto } from '../users/dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,11 +13,10 @@ export class AuthService {
               private jwtService: JwtService) {
   }
 
-  async validateUser(username: string, pass: string): Promise<Partial<User>> {
+  async validateUser(username: string, pass: string): Promise<UserDto> {
     const user = await this.usersService.findOneByUsername(username);
     if (user && await bcrypt.compare(pass, user.password)) {
-      const { password, ...result } = user;
-      return result;
+      return UserDto.map(user);
     }
     return null;
   }
@@ -28,8 +28,7 @@ export class AuthService {
     };
   }
 
-  async register(createUserDto: CreateUserDto): Promise<Partial<User>> {
-    const { password, ...result } = await this.usersService.create(createUserDto);
-    return result;
+  async register(createUserDto: CreateUserDto): Promise<UserDto> {
+    return UserDto.map(await this.usersService.create(createUserDto));
   }
 }

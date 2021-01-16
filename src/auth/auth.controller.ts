@@ -7,6 +7,7 @@ import { AccessToken, LoginDto } from './auth.class';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/entities/user.entity';
 import { Public } from '../decorators/public.decorator';
+import { UserDto } from '../users/dto/user.dto';
 
 @ApiTags('auth')
 @Controller('api/v1/auth')
@@ -40,8 +41,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiSecurity('jwt')
   @Get('/_me')
-  getProfile(@Request() req): Partial<User> {
-    const { password, ...result } = req.user;
-    return result;
+  getProfile(@Request() req): UserDto {
+    return UserDto.map(req.user);
   }
 }

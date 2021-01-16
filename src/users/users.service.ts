@@ -37,7 +37,7 @@ export class UsersService {
     return this.users.count();
   }
 
-  async findPaginated(pagination: PaginationDto): Promise<Paginated<Partial<User>>> {
+  async findPaginated(pagination: PaginationDto): Promise<Paginated<User>> {
     this.logger.log(`Trying to fetch ${pagination.take} users, starting at ${pagination.next}`);
 
     const [results, total] = await this.users
@@ -53,8 +53,6 @@ export class UsersService {
     if (nextCursor) {
       results.pop();
     }
-
-    results.map(res => res.password = undefined);
 
     return {
       results,

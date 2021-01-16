@@ -1,5 +1,4 @@
 import { Column, Entity, Index } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../../enums/role.enum';
 import { BaseEntity } from '../../common/base.entity';
 
@@ -7,7 +6,6 @@ import { BaseEntity } from '../../common/base.entity';
 export class User extends BaseEntity {
   @Column()
   @Index({ unique: true })
-  @ApiProperty({ description: 'The username', example: 'userA' })
   username: string;
 
   @Column()
@@ -18,6 +16,5 @@ export class User extends BaseEntity {
     enum: Role,
     default: Role.Ghost,
   })
-  @ApiProperty({ description: 'The users role', example: 'Admin' })
   role: Role;
 }
