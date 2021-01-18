@@ -22,7 +22,7 @@ export class AuthController {
     description: 'The register details',
     type: CreateUserDto,
   })
-  @ApiOkResponse({ description: 'The access token for the user', type: AccessToken })
+  @ApiOkResponse({ description: 'The access token for the user', type: RegisterResponseDto })
   async create(@Body(new ValidationPipe({ transform: true })) createUserDto: CreateUserDto): Promise<RegisterResponseDto> {
     const user = await this.authService.register(createUserDto);
 
