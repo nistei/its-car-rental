@@ -20,14 +20,14 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    this.logger.log(`Creating user with name ${createUserDto.username}`);
+    this.logger.log(`Creating user with email ${createUserDto.email}`);
 
     const salt = await bcrypt.genSalt();
     const hashed = await bcrypt.hash(createUserDto.password, salt);
 
     // TODO: Catch and return well formed error (ER_DUP_ENTRY)
     return this.users.save({
-      username: createUserDto.username,
+      email: createUserDto.email,
       password: hashed,
       role: Role.Ghost,
     });
@@ -66,8 +66,8 @@ export class UsersService {
     return this.users.findOne(id);
   }
 
-  findOneByUsername(username: string): Promise<User> {
-    return this.users.findOne({ username });
+  findOneByEmail(email: string): Promise<User> {
+    return this.users.findOne({ email });
   }
 
   // TODO: Implement

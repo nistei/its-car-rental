@@ -4,8 +4,8 @@ import { Role } from '../../enums/role.enum';
 import { User } from '../entities/user.entity';
 
 export class UserDto extends BaseDto {
-  @ApiProperty({ description: 'The username', example: 'userA' })
-  username: string;
+  @ApiProperty({ description: 'The email of the user', example: 'user@x.com' })
+  email: string;
 
   @ApiProperty({ description: 'The users role', example: 'Admin' })
   role: Role;

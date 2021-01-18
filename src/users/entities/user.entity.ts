@@ -6,7 +6,7 @@ import { BaseEntity } from '../../common/base.entity';
 export class User extends BaseEntity {
   @Column()
   @Index({ unique: true })
-  username: string;
+  email: string;
 
   @Column()
   password: string;

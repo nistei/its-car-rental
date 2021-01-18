@@ -13,16 +13,16 @@ export class AuthService {
               private jwtService: JwtService) {
   }
 
-  async validateUser(username: string, pass: string): Promise<UserDto> {
-    const user = await this.usersService.findOneByUsername(username);
+  async validateUser(email: string, pass: string): Promise<UserDto> {
+    const user = await this.usersService.findOneByEmail(email);
     if (user && await bcrypt.compare(pass, user.password)) {
       return UserDto.map(user);
     }
     return null;
   }
 
-  login(user: User): AccessToken {
-    const payload: JwtPayload = { username: user.username, sub: user.id, role: user.role };
+  login(user: User | UserDto): AccessToken {
+    const payload: JwtPayload = { email: user.email, sub: user.id, role: user.role };
     return {
       accessToken: this.jwtService.sign(payload),
     };

@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Request, Get, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Get, Body, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
@@ -8,6 +8,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/entities/user.entity';
 import { Public } from '../decorators/public.decorator';
 import { UserDto } from '../users/dto/user.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
 
 @ApiTags('auth')
 @Controller('api/v1/auth')
@@ -21,9 +22,14 @@ export class AuthController {
     description: 'The register details',
     type: CreateUserDto,
   })
-  @ApiOkResponse({ description: 'The created user account', type: User })
-  create(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
-    return this.authService.register(createUserDto);
+  @ApiOkResponse({ description: 'The access token for the user', type: AccessToken })
+  async create(@Body(new ValidationPipe({ transform: true })) createUserDto: CreateUserDto): Promise<RegisterResponseDto> {
+    const user = await this.authService.register(createUserDto);
+
+    return {
+      token: this.authService.login(user),
+      user
+    };
   }
 
   @UseGuards(LocalAuthGuard)
