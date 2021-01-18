@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Request, ValidationPipe } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
@@ -17,7 +17,7 @@ export class ReservationsController {
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice)
   @ApiOkResponse()
   @ApiConflictResponse()
-  create(@Body() createReservationDto: CreateReservationDto, @Request() req): Promise<ReservationDto> {
+  create(@Body(new ValidationPipe({ transform: true })) createReservationDto: CreateReservationDto, @Request() req): Promise<ReservationDto> {
     return this.reservationsService.create(createReservationDto, req.user).then(ReservationDto.map);
   }
 
@@ -35,7 +35,7 @@ export class ReservationsController {
 
   @Put(':id')
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice)
-  update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto): Promise<ReservationDto> {
+  update(@Param('id', new ValidationPipe({ transform: true })) id: string, @Body() updateReservationDto: UpdateReservationDto): Promise<ReservationDto> {
     return this.reservationsService.update(+id, updateReservationDto).then(ReservationDto.map);
   }
 

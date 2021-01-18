@@ -3,11 +3,12 @@ import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { Reservation } from './entities/reservation.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, MoreThan, Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { VehiclesService } from '../vehicles/vehicles.service';
 import { LocationsService } from '../locations/locations.service';
 import { User } from '../users/entities/user.entity';
 import { Vehicle } from '../vehicles/entities/vehicle.entity';
+import { Role } from '../enums/role.enum';
 
 @Injectable()
 export class ReservationsService {
@@ -24,14 +25,21 @@ export class ReservationsService {
   async create(createReservationDto: CreateReservationDto, user: User): Promise<Reservation> {
     this.logger.log('Creating new reservation');
 
+    // Normal customers can only reserve for their user id
+    if (user.role === Role.Customer && user.id !== createReservationDto.user) {
+      throw new HttpException('You are not authorized to make a reservation for this person', HttpStatus.FORBIDDEN);
+    }
+
     const vehicle = await this.vehicles.findOne(createReservationDto.vehicle);
     const pickupLocation = await this.locations.findOne(createReservationDto.pickupLocation);
     const returnLocation = await this.locations.findOne(createReservationDto.returnLocation);
 
-    if (!(await this.vehicleIsFree(
+    const overlaps = await this.findOverlaps(
       vehicle,
       createReservationDto.selectedPickupTime,
-      createReservationDto.selectedReturnTime))) {
+      createReservationDto.selectedReturnTime);
+
+    if (overlaps.length > 0) {
       throw new HttpException('Vehicle is occupied in this range', HttpStatus.CONFLICT);
     }
 
@@ -62,14 +70,12 @@ export class ReservationsService {
     return reservation;
   }
 
-  async vehicleIsFree(vehicle: Vehicle, start: Date, end: Date): Promise<boolean> {
-    const overlaps = await this.reservations.find({
-      selectedPickupTime: LessThan(end),
-      selectedReturnTime: MoreThan(start),
+  findOverlaps(vehicle: Vehicle, start: Date, end: Date): Promise<Reservation[]> {
+    return this.reservations.find({
+      selectedPickupTime: LessThanOrEqual(end),
+      selectedReturnTime: MoreThanOrEqual(start),
       vehicle,
     });
-
-    return overlaps.length === 0;
   }
 
   // TODO: Implement

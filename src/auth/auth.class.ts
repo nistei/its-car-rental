@@ -7,10 +7,10 @@ export class JwtPayload {
 }
 
 export class LoginDto {
-  @ApiProperty()
+  @ApiProperty({ description: 'The username', example: 'userA' })
   username: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The users password', example: 'sUpeR_SEcuRe' })
   password: string;
 }
 

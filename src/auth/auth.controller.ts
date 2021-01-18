@@ -22,7 +22,7 @@ export class AuthController {
     type: CreateUserDto,
   })
   @ApiOkResponse({ description: 'The created user account', type: User })
-  create(@Body() createUserDto: CreateUserDto): Promise<Partial<User>> {
+  create(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
     return this.authService.register(createUserDto);
   }
 
