@@ -10,6 +10,12 @@ export class UserDto extends BaseDto {
   @ApiProperty({ description: 'The users role', example: 'Admin' })
   role: Role;
 
+  @ApiProperty({ description: 'The users first name', example: 'Max' })
+  firstName: string;
+
+  @ApiProperty({ description: 'The users last name', example: 'Mustermann' })
+  lastName: string;
+
   public static map(user: User): UserDto {
     const u = {
       ...user,

@@ -17,4 +17,10 @@ export class User extends BaseEntity {
     default: Role.Ghost,
   })
   role: Role;
+
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
 }

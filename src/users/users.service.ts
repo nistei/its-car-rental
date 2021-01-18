@@ -26,10 +26,12 @@ export class UsersService {
     const hashed = await bcrypt.hash(createUserDto.password, salt);
 
     // TODO: Catch and return well formed error (ER_DUP_ENTRY)
-    return this.users.save({
+    return this.users.save<User>({
       email: createUserDto.email,
       password: hashed,
       role: Role.Ghost,
+      firstName: createUserDto.firstName,
+      lastName: createUserDto.lastName
     });
   }
 
