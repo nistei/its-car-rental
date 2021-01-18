@@ -26,7 +26,7 @@ export class LocationsService {
       throw new HttpException(`Manager with id ${createLocationDto.manager} not found`, 404);
     }
 
-    return await this.locations.save({
+    return await this.locations.save<Location>({
       name: createLocationDto.name,
       vehicleCapacity: createLocationDto.vehicleCapacity,
       manager,

@@ -18,7 +18,7 @@ export class VehicleCategoriesService {
   async create(createVehicleCategoryDto: CreateVehicleCategoryDto): Promise<VehicleCategory> {
     this.logger.log('Creating new vehicle category');
 
-    return await this.categories.save({
+    return await this.categories.save<VehicleCategory>({
       name: createVehicleCategoryDto.name,
       iconUrl: createVehicleCategoryDto.iconUrl,
     });

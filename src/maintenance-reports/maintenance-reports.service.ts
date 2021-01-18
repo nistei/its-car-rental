@@ -23,7 +23,7 @@ export class MaintenanceReportsService {
 
     const vehicle = await this.vehicles.findOne(createMaintenanceReportDto.vehicle);
 
-    return await this.reports.save({
+    return await this.reports.save<MaintenanceReport>({
       vehicle,
       mechanic,
       details: createMaintenanceReportDto.details,

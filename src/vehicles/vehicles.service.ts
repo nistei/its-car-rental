@@ -22,7 +22,7 @@ export class VehiclesService {
 
     const category = await this.categories.findOne(createVehicleDto.category);
 
-    return await this.vehicles.save({
+    return await this.vehicles.save<Vehicle>({
       ...createVehicleDto,
       category,
     })

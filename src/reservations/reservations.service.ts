@@ -43,7 +43,7 @@ export class ReservationsService {
       throw new HttpException('Vehicle is occupied in this range', HttpStatus.CONFLICT);
     }
 
-    return await this.reservations.save({
+    return await this.reservations.save<Reservation>({
       user,
       vehicle,
       pickupLocation,
