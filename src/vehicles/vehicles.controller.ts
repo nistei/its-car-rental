@@ -22,7 +22,7 @@ export class VehiclesController {
 
   @Get()
   @Public()
-  @ApiQuery({ name: 'category', description: 'Category ID to filter for', type: Number })
+  @ApiQuery({ name: 'category', description: 'Category ID to filter for', type: Number, required: false })
   findAll(@Query('category') categoryId: number): Promise<VehicleDto[]> {
     if (categoryId) {
       return this.vehiclesService.findAllByCategoryId(categoryId).then(VehicleDto.mapList);
