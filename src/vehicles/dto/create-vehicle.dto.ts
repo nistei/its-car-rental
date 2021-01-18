@@ -18,4 +18,7 @@ export class CreateVehicleDto {
 
   @ApiProperty({description: 'URL to an image of the vehicle'})
   imageUrl: string;
+
+  @ApiProperty({description: 'Price per day to rent the vehicle'})
+  pricePerDay: number;
 }

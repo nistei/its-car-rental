@@ -24,4 +24,8 @@ export class Vehicle extends BaseEntity {
 
   @Column()
   imageUrl: string;
+
+  @Column()
+  @Index()
+  pricePerDay: number;
 }

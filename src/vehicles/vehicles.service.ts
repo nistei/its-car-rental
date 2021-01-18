@@ -33,6 +33,11 @@ export class VehiclesService {
     return this.vehicles.find();
   }
 
+  // TODO: Paginate
+  findAllByCategoryId(categoryId: number): Promise<Vehicle[]> {
+    return this.vehicles.find({ category: { id: categoryId }});
+  }
+
   // TODO: Implement
   async findOne(id: number): Promise<Vehicle> {
     const vehicle = await this.vehicles.findOne(id);

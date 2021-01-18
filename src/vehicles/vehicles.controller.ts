@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { Public } from '../decorators/public.decorator';
@@ -22,7 +22,12 @@ export class VehiclesController {
 
   @Get()
   @Public()
-  findAll(): Promise<VehicleDto[]> {
+  @ApiQuery({ name: 'category', description: 'Category ID to filter for', type: Number })
+  findAll(@Query('category') categoryId: number): Promise<VehicleDto[]> {
+    if (categoryId) {
+      return this.vehiclesService.findAllByCategoryId(categoryId).then(VehicleDto.mapList);
+    }
+
     return this.vehiclesService.findAll().then(VehicleDto.mapList);
   }
 
