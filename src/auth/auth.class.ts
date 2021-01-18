@@ -7,7 +7,7 @@ export class JwtPayload {
 }
 
 export class LoginDto {
-  @ApiProperty({ description: 'The email', example: 'userA' })
+  @ApiProperty({ description: 'The email of the user', example: 'user@x.com' })
   email: string;
 
   @ApiProperty({ description: 'The users password', example: 'sUpeR_SEcuRe' })
