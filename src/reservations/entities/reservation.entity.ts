@@ -19,7 +19,7 @@ export class Reservation extends BaseEntity {
   @Index()
   selectedPickupTime: Date;
 
-  @Column()
+  @Column({ nullable: true })
   @Index()
   actualPickupTime?: Date;
 
@@ -30,7 +30,7 @@ export class Reservation extends BaseEntity {
   @Index()
   selectedReturnTime: Date;
 
-  @Column()
+  @Column({ nullable: true })
   @Index()
   actualReturnTime?: Date;
 }

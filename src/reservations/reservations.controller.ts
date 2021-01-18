@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Request } from '@nestj
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiConflictResponse, ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { ReservationDto } from './dto/reservation.dto';
@@ -15,6 +15,8 @@ export class ReservationsController {
 
   @Post()
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice)
+  @ApiOkResponse()
+  @ApiConflictResponse()
   create(@Body() createReservationDto: CreateReservationDto, @Request() req): Promise<ReservationDto> {
     return this.reservationsService.create(createReservationDto, req.user).then(ReservationDto.map);
   }
