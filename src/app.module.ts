@@ -15,6 +15,7 @@ import { VehiclesModule } from './vehicles/vehicles.module';
 import { LocationsModule } from './locations/locations.module';
 import { VehicleCategoriesModule } from './vehicle-categories/vehicle-categories.module';
 import { ReservationsModule } from './reservations/reservations.module';
+import { NotificationsModule } from './notifications/notifications.module';
 import * as winston from 'winston';
 
 @Module({
@@ -72,6 +73,7 @@ import * as winston from 'winston';
     LocationsModule,
     VehicleCategoriesModule,
     ReservationsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

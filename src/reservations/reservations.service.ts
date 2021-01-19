@@ -9,6 +9,7 @@ import { LocationsService } from '../locations/locations.service';
 import { User } from '../users/entities/user.entity';
 import { Vehicle } from '../vehicles/entities/vehicle.entity';
 import { Role } from '../enums/role.enum';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class ReservationsService {
@@ -19,6 +20,7 @@ export class ReservationsService {
     private readonly reservations: Repository<Reservation>,
     private readonly vehicles: VehiclesService,
     private readonly locations: LocationsService,
+    private readonly notifications: NotificationsService,
   ) {
   }
 
@@ -43,7 +45,7 @@ export class ReservationsService {
       throw new HttpException('Vehicle is occupied in this range', HttpStatus.CONFLICT);
     }
 
-    return await this.reservations.save<Reservation>({
+    const reservation = await this.reservations.save<Reservation>({
       user,
       vehicle,
       pickupLocation,
@@ -53,6 +55,16 @@ export class ReservationsService {
       selectedReturnTime: createReservationDto.selectedReturnTime,
       actualReturnTime: null,
     });
+
+    if (reservation) {
+      this.notifications.send(user, 'reservation', 'Your reservation is confirmed.').then()
+        .catch(e => {
+          this.logger.error('Error while sending notification');
+          this.logger.error(e);
+        });
+    }
+
+    return reservation;
   }
 
   // TODO: Paginate
