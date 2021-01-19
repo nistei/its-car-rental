@@ -15,17 +15,11 @@ export class ReservationDto extends BaseDto {
   @ApiProperty({ description: 'The, by the user, selected pickup time' })
   selectedPickupTime: Date;
 
-  @ApiProperty({ description: 'The actual pickup time' })
-  actualPickupTime?: Date;
-
   @ApiProperty({ description: 'The location where the vehicle will be returned' })
   returnLocation: number;
 
   @ApiProperty({ description: 'The, by the user, selected return time' })
   selectedReturnTime: Date;
-
-  @ApiProperty({ description: 'The actual return time' })
-  actualReturnTime?: Date;
 
   public static map(reservation: Reservation): ReservationDto {
     return {

@@ -19,18 +19,10 @@ export class Reservation extends BaseEntity {
   @Index()
   selectedPickupTime: Date;
 
-  @Column({ nullable: true })
-  @Index()
-  actualPickupTime?: Date;
-
   @ManyToOne(() => Location, x => x.id)
   returnLocation: Location;
 
   @Column()
   @Index()
   selectedReturnTime: Date;
-
-  @Column({ nullable: true })
-  @Index()
-  actualReturnTime?: Date;
 }

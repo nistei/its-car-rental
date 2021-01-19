@@ -51,9 +51,7 @@ export class ReservationsService {
       pickupLocation,
       returnLocation,
       selectedPickupTime: createReservationDto.selectedPickupTime,
-      actualPickupTime: null,
       selectedReturnTime: createReservationDto.selectedReturnTime,
-      actualReturnTime: null,
     });
 
     if (reservation) {
