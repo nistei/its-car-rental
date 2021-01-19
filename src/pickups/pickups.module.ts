@@ -8,6 +8,7 @@ import { ReservationsModule } from '../reservations/reservations.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Pickup]), ReservationsModule],
   controllers: [PickupsController],
-  providers: [PickupsService]
+  providers: [PickupsService],
+  exports: [PickupsService],
 })
 export class PickupsModule {}

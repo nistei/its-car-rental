@@ -22,11 +22,12 @@ export class PickupsService {
     this.logger.log(`Creating new pickup report for reservation '${createPickupDto.reservation}'`);
 
     const reservation = await this.reservations.findOne(createPickupDto.reservation);
-    const existingPickup = await this.pickups.findOne({ reservation: {id: createPickupDto.reservation }});
+    const existingPickup = await this.pickups.findOne({ reservation: { id: createPickupDto.reservation } });
 
     if (existingPickup) {
-      this.logger.log(`Vehicle for reservation ${createPickupDto.reservation} has already been picked up`);
-      throw new HttpException(`Vehicle for reservation ${createPickupDto.reservation} has already been picked up`, HttpStatus.CONFLICT);
+      const e = new HttpException(`Vehicle for reservation ${createPickupDto.reservation} has already been picked up`, HttpStatus.CONFLICT);
+      this.logger.error(e);
+      throw e;
     }
 
     return await this.pickups.save<Pickup>({
@@ -48,6 +49,10 @@ export class PickupsService {
     }
 
     return pickup;
+  }
+
+  findByReservationId(id: number): Promise<Pickup[]> {
+    return this.pickups.find({ reservation: { id }});
   }
 
   // TODO: Implement
