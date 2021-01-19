@@ -5,7 +5,6 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AccessToken, LoginDto } from './auth.class';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { User } from '../users/entities/user.entity';
 import { Public } from '../decorators/public.decorator';
 import { UserDto } from '../users/dto/user.dto';
 import { RegisterResponseDto } from './dto/register-response.dto';
