@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  Query,
+  UseInterceptors,
+  CacheInterceptor, CacheTTL,
+} from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
@@ -10,6 +21,7 @@ import { VehicleDto } from './dto/vehicle.dto';
 
 @ApiTags('vehicles')
 @Controller('api/v1/vehicles')
+@UseInterceptors(CacheInterceptor)
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
@@ -22,6 +34,7 @@ export class VehiclesController {
 
   @Get()
   @Public()
+  @CacheTTL(15)
   @ApiQuery({ name: 'category', description: 'Category ID to filter for', type: Number, required: false })
   findAll(@Query('category') categoryId: number): Promise<VehicleDto[]> {
     if (categoryId) {
@@ -33,6 +46,7 @@ export class VehiclesController {
 
   @Get(':id')
   @Public()
+  @CacheTTL(10)
   findOne(@Param('id') id: string): Promise<VehicleDto> {
     return this.vehiclesService.findOne(+id).then(VehicleDto.map);
   }

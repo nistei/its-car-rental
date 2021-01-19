@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  CacheInterceptor,
+  CacheTTL,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseInterceptors,
+} from '@nestjs/common';
 import { LocationsService } from './locations.service';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
@@ -10,6 +21,7 @@ import { LocationDto } from './dto/loaction.dto';
 
 @ApiTags('locations')
 @Controller('api/v1/locations')
+@UseInterceptors(CacheInterceptor)
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
@@ -22,12 +34,14 @@ export class LocationsController {
 
   @Get()
   @Public()
+  @CacheTTL(15)
   findAll(): Promise<LocationDto[]> {
     return this.locationsService.findAll().then(LocationDto.mapList);
   }
 
   @Get(':id')
   @Public()
+  @CacheTTL(10)
   findOne(@Param('id') id: string): Promise<LocationDto> {
     return this.locationsService.findOne(+id).then(LocationDto.map);
   }
