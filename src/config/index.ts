@@ -39,7 +39,6 @@ function envOrFile(envName: string, defaultPath?: string): string {
   const basePath = process.env.SECRET_BASE_PATH || './secrets';
   const filePath = path.join(basePath, defaultPath);
 
-  console.log(filePath);
   if (filePath && fs.existsSync(filePath)) {
     return fs.readFileSync(filePath).toString();
   }
