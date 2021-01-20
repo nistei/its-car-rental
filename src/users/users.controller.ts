@@ -31,7 +31,7 @@ export class UsersController {
     description: 'The next id to take',
     schema: { minimum: 0, default: 0 }
   })
-  findPaginated(@Query(new ValidationPipe({ transform: true })) pagination: PaginationDto): Promise<Paginated<UserDto>> {
+  findPaginated(@Query() pagination: PaginationDto): Promise<Paginated<UserDto>> {
     return this.usersService.findPaginated(pagination).then(paginated => {
       return {
         ...paginated,

@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotImplementedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotImplementedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -25,14 +25,23 @@ export class UsersService {
     const salt = await bcrypt.genSalt();
     const hashed = await bcrypt.hash(createUserDto.password, salt);
 
-    // TODO: Catch and return well formed error (ER_DUP_ENTRY)
-    return this.users.save<User>({
-      email: createUserDto.email,
-      password: hashed,
-      role: Role.Ghost,
-      firstName: createUserDto.firstName,
-      lastName: createUserDto.lastName
-    });
+    try {
+      return await this.users.save<User>({
+        email: createUserDto.email,
+        password: hashed,
+        role: Role.Ghost,
+        firstName: createUserDto.firstName,
+        lastName: createUserDto.lastName
+      });
+    } catch (e) {
+      // Duplicate
+      if (e.errno === 1062) {
+        this.logger.warn(`User with email ${createUserDto.email} already exists`);
+        throw new HttpException(`User with email ${createUserDto.email} already exists`, HttpStatus.CONFLICT);
+      } else {
+        throw e;
+      }
+    }
   }
 
   count(): Promise<number> {

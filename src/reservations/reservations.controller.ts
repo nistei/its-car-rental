@@ -17,7 +17,7 @@ export class ReservationsController {
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice)
   @ApiOkResponse()
   @ApiConflictResponse()
-  create(@Body(new ValidationPipe({ transform: true })) createReservationDto: CreateReservationDto, @Request() req): Promise<ReservationDto> {
+  create(@Body() createReservationDto: CreateReservationDto, @Request() req): Promise<ReservationDto> {
     return this.reservationsService.create(createReservationDto, req.user).then(ReservationDto.map);
   }
 
@@ -35,7 +35,7 @@ export class ReservationsController {
 
   @Put(':id')
   @Roles(Role.Customer, Role.CustomerService, Role.FrontOffice)
-  update(@Param('id', new ValidationPipe({ transform: true })) id: string, @Body() updateReservationDto: UpdateReservationDto): Promise<ReservationDto> {
+  update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto): Promise<ReservationDto> {
     return this.reservationsService.update(+id, updateReservationDto).then(ReservationDto.map);
   }
 

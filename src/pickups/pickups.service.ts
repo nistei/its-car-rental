@@ -26,7 +26,7 @@ export class PickupsService {
 
     if (existingPickup) {
       const e = new HttpException(`Vehicle for reservation ${createPickupDto.reservation} has already been picked up`, HttpStatus.CONFLICT);
-      this.logger.error(e);
+      this.logger.warn(e);
       throw e;
     }
 

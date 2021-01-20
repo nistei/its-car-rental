@@ -4,6 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { start } from 'elastic-apm-node';
+import { ValidationPipe } from '@nestjs/common';
 start();
 
 async function bootstrap() {
@@ -12,6 +13,11 @@ async function bootstrap() {
 
   // CORS
   app.enableCors();
+
+  // Request param/body/query validation
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true
+  }));
 
   // Swagger
   const options = new DocumentBuilder()

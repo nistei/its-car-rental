@@ -38,7 +38,6 @@ export class VehiclesService {
     return this.vehicles.find({ category: { id: categoryId }});
   }
 
-  // TODO: Implement
   async findOne(id: number): Promise<Vehicle> {
     const vehicle = await this.vehicles.findOne(id);
 
@@ -49,9 +48,21 @@ export class VehiclesService {
     return vehicle;
   }
 
-  // TODO: Implement
-  update(id: number, updateVehicleDto: UpdateVehicleDto): Promise<Vehicle> {
-    throw new NotImplementedException();
+  async update(id: number, updateVehicleDto: UpdateVehicleDto): Promise<Vehicle> {
+    this.logger.log(`Updating vehicle with id ${id}`);
+
+    await this.findOne(id);
+
+    const update: any = {
+      ...updateVehicleDto
+    };
+
+    if (updateVehicleDto.category) {
+      update.category = await this.categories.findOne(updateVehicleDto.category);
+    }
+
+    await this.vehicles.update(id, update);
+    return this.vehicles.findOne(id);
   }
 
   // TODO: Implement

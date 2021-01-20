@@ -28,13 +28,13 @@ export class ReturnsService {
     const pickup = await this.pickups.findByReservationId(reservation.id);
     if (pickup.length !== 1) {
       const e = new HttpException(`Vehicle for reservation ${createReturnDto.reservation} has not been picked up yet`, HttpStatus.BAD_REQUEST);
-      this.logger.error(e);
+      this.logger.warn(e);
       throw e;
     }
 
     const existingReturn = await this.returns.findOne({ reservation: {id: createReturnDto.reservation }});
     if (existingReturn) {
-      this.logger.error(`Vehicle for reservation ${createReturnDto.reservation} has already been returned`);
+      this.logger.warn(`Vehicle for reservation ${createReturnDto.reservation} has already been returned`);
       throw new HttpException(`Vehicle for reservation ${createReturnDto.reservation} has already been returned`, HttpStatus.CONFLICT);
     }
 
