@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger, NotImplementedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotImplementedException } from '@nestjs/common';
 import { CreateVehicleCategoryDto } from './dto/create-vehicle-category.dto';
 import { UpdateVehicleCategoryDto } from './dto/update-vehicle-category.dto';
 import { VehicleCategory } from './entities/vehicle-category.entity';
@@ -44,8 +44,20 @@ export class VehicleCategoriesService {
     throw new NotImplementedException();
   }
 
-  // TODO: Implement
-  remove(id: number) {
-    throw new NotImplementedException();
+  async remove(id: number) {
+    this.logger.log(`Trying to remove category with id ${id}`);
+    const category = await this.findOne(id);
+
+    try {
+      await this.categories.remove(category);
+    } catch (e) {
+      // FK Constraint
+      if (e.errno === 1451) {
+        this.logger.warn(`Tried to remove category with id ${id} which is still in use`);
+        throw new HttpException(`Category id ${id} is still in use`, HttpStatus.BAD_REQUEST);
+      } else {
+        throw e;
+      }
+    }
   }
 }
