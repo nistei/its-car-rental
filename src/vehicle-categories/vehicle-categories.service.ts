@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger, NotImplementedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateVehicleCategoryDto } from './dto/create-vehicle-category.dto';
 import { UpdateVehicleCategoryDto } from './dto/update-vehicle-category.dto';
 import { VehicleCategory } from './entities/vehicle-category.entity';
@@ -39,9 +39,13 @@ export class VehicleCategoriesService {
     return category;
   }
 
-  // TODO: Implement
-  update(id: number, updateVehicleCategoryDto: UpdateVehicleCategoryDto): Promise<VehicleCategory> {
-    throw new NotImplementedException();
+  async update(id: number, updateVehicleCategoryDto: UpdateVehicleCategoryDto): Promise<VehicleCategory> {
+    this.logger.log(`Updating category with id ${id}`);
+
+    await this.findOne(id);
+
+    await this.categories.update(id, updateVehicleCategoryDto);
+    return this.categories.findOne(id);
   }
 
   async remove(id: number) {
